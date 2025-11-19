@@ -112,3 +112,26 @@ let from_file path =
   close_in infile ;
   final_graph
   
+
+  let export  graph filename =
+    let ff = open_out filename in
+    
+    (* Header of the dot file *)
+    fprintf ff "digraph G {\n";
+
+    (* Export of the nodes *)
+    n_iter graph (fun id ->
+      fprintf ff "  %d;\n" id
+    ) ;
+
+    (* Export of the edges *)
+    e_iter graph (fun { src ; tgt; lbl} ->
+      Printf.fprintf ff "  %d -> %d [label=\"%s\"];\n" src tgt lbl
+    ) ;
+
+    (* End of file  *)
+    fprintf ff "}\n";
+    close_out ff;
+  ;;
+ 
+    

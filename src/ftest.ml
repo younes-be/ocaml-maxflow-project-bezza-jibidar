@@ -1,5 +1,7 @@
 open Gfile
 open Tools
+open FordFulkerson
+open Graph
 let () =
 
   (* Check the number of command-line arguments *)
@@ -16,10 +18,10 @@ let () =
 
 
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
-  
+
   let infile = Sys.argv.(1)
   and outfile = Sys.argv.(4)
-  
+
   (* These command-line arguments are not used for the moment. *)
   and _source = int_of_string Sys.argv.(2)
   and _sink = int_of_string Sys.argv.(3)
@@ -47,10 +49,42 @@ let () =
   (*On exporte sous le format graphviz*)
   (*test  de export*)
   let () = export (test_string_graph) ("./test_export.dot") in 
-    (*optionnel : on peut créer un svg à partir du .dot*)
-    (*avec la cmd: dot -Tsvg ./test_export.dot  > result.svg*)
-  
+  (*optionnel : on peut créer un svg à partir du .dot*)
+  (*avec la cmd: dot -Tsvg ./test_export.dot  > result.svg*)
+
+
 
 
   ()
 
+(* Test pour FordFulkerson.find_path  sans boucle*)
+let () =
+
+  let graph = from_file "graphs/graph1.txt"
+  in
+  (* s'assurer qu'il y a un arc 1 -> 2 *)
+  let path = find_path graph 0 5 in
+
+
+  (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
+  let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
+  let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
+  Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)
+
+
+
+(* Test pour FordFulkerson.find_path  avec boucle*)
+let () =
+
+  let graphinit = from_file "graphs/graph1.txt"
+  in
+
+  (*rajouter une boucle avec une arête entre 5 et 2 *)
+  let graph_boucle = add_arc (gmap graphinit int_of_string) 5 2 67 in
+  (* s'assurer qu'il y a un arc 1 -> 2 *)
+  let path = find_path (gmap graph_boucle string_of_int) 0 5 in
+
+  (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
+  let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
+  let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
+  Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)

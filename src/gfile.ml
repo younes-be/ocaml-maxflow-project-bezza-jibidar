@@ -1,6 +1,6 @@
 open Graph
 open Printf
-    
+
 type path = string
 
 (* Format of text files:
@@ -30,7 +30,7 @@ let compute_y id =
   let sgn = if delta mod 2 = 0 then -1 else 1 in
 
   300 + sgn * (delta / 2) * 100
-  
+
 
 let write_file path graph =
 
@@ -46,9 +46,9 @@ let write_file path graph =
 
   (* Write all arcs *)
   let _ = e_fold graph (fun count arc -> fprintf ff "e %d %d %d %s\n" arc.src arc.tgt count arc.lbl ; count + 1) 0 in
-  
+
   fprintf ff "\n%% End of graph\n" ;
-  
+
   close_out ff ;
   ()
 
@@ -108,30 +108,29 @@ let from_file path =
   in
 
   let final_graph = loop empty_graph in
-  
+
   close_in infile ;
   final_graph
-  
 
-  let export  graph path =
-    let ff = open_out path in
-    
-    (* Header of the dot file *)
-    fprintf ff "digraph G {\n";
 
-    (* Export of the nodes *)
-    n_iter graph (fun id ->
+let export  graph path =
+  let ff = open_out path in
+
+  (* Header of the dot file *)
+  fprintf ff "digraph G {\n";
+
+  (* Export of the nodes *)
+  n_iter graph (fun id ->
       fprintf ff "  %d;\n" id
     ) ;
 
-    (* Export of the edges *)
-    e_iter graph (fun { src ; tgt; lbl} ->
+  (* Export of the edges *)
+  e_iter graph (fun { src ; tgt; lbl} ->
       Printf.fprintf ff "  %d -> %d [label=\"%s\"];\n" src tgt lbl
     ) ;
 
-    (* End of file  *)
-    fprintf ff "}\n";
-    close_out ff;
-  ;;
- 
-    
+  (* End of file  *)
+  fprintf ff "}\n";
+  close_out ff;
+;;
+

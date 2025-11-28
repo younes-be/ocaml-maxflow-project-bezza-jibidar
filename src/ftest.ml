@@ -1,5 +1,5 @@
 open Gfile
-    
+open Tools
 let () =
 
   (* Check the number of command-line arguments *)
@@ -28,8 +28,29 @@ let () =
   (* Open file *)
   let graph = from_file infile in
 
+  (*test de clone_nodes*)
+  (*à cette étape, on a un graphe qui contient seulement les nodes du graphe dans le fichier.*)
+  let test_cloned_graph = clone_nodes graph in
+
+  (*on ajoute un arc qui n'existait pas dans le graphe précédent*)
+  (*test de add_arc*)
+  let test_int_graph = add_arc test_cloned_graph 1 2 67 in
+
+  (*On passe d'un int graph à un string graphe*)
+  (*test gmap*)
+  let test_string_graph = gmap test_int_graph (string_of_int) in
+
+  (*on réécrit le nouveau graphe (tous les noeuds et un seul arc de 1 à 2) dans un fichier*)
   (* Rewrite the graph that has been read. *)
-  let () = write_file outfile graph in
+  let () = write_file outfile test_string_graph in
+
+  (*On exporte sous le format graphviz*)
+  (*test  de export*)
+  let () = export (test_string_graph) ("./test_export.dot") in 
+    (*optionnel : on peut créer un svg à partir du .dot*)
+    (*avec la cmd: dot -Tsvg ./test_export.dot  > result.svg*)
+  
+
 
   ()
 

@@ -113,8 +113,8 @@ let from_file path =
   final_graph
   
 
-  let export  graph filename =
-    let ff = open_out filename in
+  let export  graph path =
+    let ff = open_out path in
     
     (* Header of the dot file *)
     fprintf ff "digraph G {\n";

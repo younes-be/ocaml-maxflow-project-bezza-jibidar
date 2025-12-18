@@ -19,6 +19,3 @@ let add_arc g id1 id2 n =
 
 
 
-
-
-

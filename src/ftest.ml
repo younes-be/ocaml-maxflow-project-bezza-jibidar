@@ -48,43 +48,82 @@ let () =
 
   (*On exporte sous le format graphviz*)
   (*test  de export*)
-  let () = export (test_string_graph) ("./test_export.dot") in 
+  let () = export (test_string_graph) ("./test_export2.dot") in 
   (*optionnel : on peut créer un svg à partir du .dot*)
   (*avec la cmd: dot -Tsvg ./test_export.dot  > result.svg*)
 
-
-
-
-  ()
-
-(* Test pour FordFulkerson.find_path  sans boucle*)
+  () ;;
+(* test de findPath*)
 let () =
+  let strgraph = from_file "graphs/graphtestflow.txt" in 
 
-  let graph = from_file "graphs/graph1.txt"
-  in
-  (* s'assurer qu'il y a un arc 1 -> 2 *)
-  let path = find_path graph 0 5 in
+  let graph =  gmap strgraph int_of_string in 
+  let path =  find_path graph 0 3 in 
+  let string_of_arc a = Printf.sprintf "%d->%d:%d" a.src a.tgt a.lbl in
 
-
-  (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
-  let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
   let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
-  Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)
+  Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str) in
+
+();;
 
 
-
-(* Test pour FordFulkerson.find_path  avec boucle*)
+(* test de update graph et flow path*)
 let () =
+  let strgraph = from_file "graphs/graphtestflow.txt" in 
 
-  let graphinit = from_file "graphs/graph1.txt"
-  in
+  let graph =  gmap strgraph int_of_string in 
+  let path =  find_path graph 0 3 in 
+  let resgraph = update_graph graph path (flow_path path) in 
+  export (gmap resgraph string_of_int) "./resultflowpath.dot"  in
+();;
 
-  (*rajouter une boucle avec une arête entre 5 et 2 *)
-  let graph_boucle = add_arc (gmap graphinit int_of_string) 5 2 67 in
-  (* s'assurer qu'il y a un arc 1 -> 2 *)
-  let path = find_path (gmap graph_boucle string_of_int) 0 5 in
 
-  (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
-  let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
-  let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
-  Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)
+
+
+
+let () =
+  (let strgraph = from_file "graphs/europeanGraph.txt" in 
+
+   let graph =  gmap strgraph int_of_string in 
+   let flowgraph =  fordFurkerson graph 0 3 in 
+   export flowgraph "./resultford.dot" ) in
+();;
+
+
+
+
+
+(* A transformer pour le faire marcher avec la new implémentation 
+   (* Test pour FordFulkerson.find_path  sans boucle*)
+   let () =
+
+   let graph = from_file "graphs/graph1.txt"
+   in
+   (* s'assurer qu'il y a un arc 1 -> 2 *)
+   let path = find_path graph 0 5 in
+
+
+   (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
+   let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
+   let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
+   Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)
+
+
+
+   (* Test pour FordFulkerson.find_path  avec boucle*)
+   let () =
+
+   let graphinit = from_file "graphs/graph1.txt"
+   in
+
+   (*rajouter une boucle avec une arête entre 5 et 2 *)
+   let graph_boucle = add_arc (gmap graphinit int_of_string) 5 2 67 in
+   (* s'assurer qu'il y a un arc 1 -> 2 *)
+   let path = find_path (gmap graph_boucle string_of_int) 0 5 in
+
+   (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
+   let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
+   let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
+   Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)
+
+*)

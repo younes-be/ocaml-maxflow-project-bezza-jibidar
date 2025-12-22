@@ -75,7 +75,7 @@ let create_flow_graph base_graph ford_graph =
         |None -> new_arc graph {src =arc.src;tgt =arc.tgt;lbl = "0/"^(string_of_int arc.lbl)}
         |Some x -> (
             (*Si on trouve un arc , c'est que on a sûrement mis du flot sur cette arc  *)
-            (*On check le flot sur x, si on a x.lbl > arc.lbl , c'est sûrement que dans le graphe de base , il existe un arc dasn les 2 sens*)
+            (*On check le flot sur x, si on a x.lbl > arc.lbl , c'est sûrement que dans le graphe de base , il existe un arc dans les 2 sens*)
             (*et que x n'est pas vraiment mis à contribution*)
             (* if (x.lbl > arc.lbl) then (new_arc graph {src =arc.src;tgt =arc.tgt;lbl= "0/"^(string_of_int arc.lbl)}) 
             else (new_arc graph {src =arc.src;tgt=arc.tgt; lbl= (string_of_int x.lbl)^"/"^(string_of_int arc.lbl)}) *)
@@ -84,9 +84,9 @@ let create_flow_graph base_graph ford_graph =
             |None -> new_arc graph {src=arc.src;tgt= arc.tgt;lbl= (string_of_int x.lbl)^"/"^(string_of_int arc.lbl)} 
             | Some arc_oppose ->(
               if x.lbl > arc_oppose.lbl then
-                new_arc graph {src =arc.src;tgt=arc.tgt; lbl= (string_of_int x.lbl)^"/"^(string_of_int arc.lbl)}
+                new_arc graph {src =x.src;tgt=x.tgt; lbl= (string_of_int 0)^"/"^(string_of_int arc.lbl)}
               else
-                new_arc graph {src =arc.src;tgt=arc.tgt; lbl= (string_of_int (arc_oppose.lbl-x.lbl))^"/"^(string_of_int arc_oppose.lbl)}
+                new_arc graph {src =x.src;tgt=x.tgt; lbl= (string_of_int (arc_oppose.lbl-x.lbl))^"/"^(string_of_int arc_oppose.lbl)}
             )
           )    
       )

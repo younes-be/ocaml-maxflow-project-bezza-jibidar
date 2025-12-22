@@ -2,6 +2,9 @@ open Gfile
 open Tools
 open FordFulkerson
 open Graph
+open RoutageTables
+
+(* Test for gfile functions: from_file, write_file, export, gmap, clone_nodes, add_arc *)
 let () =
 
   (* Check the number of command-line arguments *)
@@ -80,18 +83,61 @@ let () =
 
 
 
-
+(* Test for FordFulkerson*)
 let () =
-  (let strgraph = from_file "graphs/europeanGraph.txt" in 
+  (let strgraph = from_file "graphs/graphValue0.txt" in 
 
    let graph =  gmap strgraph int_of_string in 
    let flowgraph =  fordFurkerson graph 0 3 in 
    export flowgraph "./resultford.dot" ) in
 ();;
 
+(* Test for FordFulkerson without cycle*)
+let () =
+  (let strgraph = from_file "graphs/graphtestflow.txt" in 
 
+   let graph =  gmap strgraph int_of_string in 
+   let flowgraph =  fordFurkerson graph 0 3 in 
+   export flowgraph "./resulttestFord.dot" ) in
+();;
 
+(* Test for FordFulkerson with cycles*)
+let () =
+  (let strgraph = from_file "graphs/europeanGraph.txt" in 
 
+   let graph =  gmap strgraph int_of_string in 
+   let flowgraph =  fordFurkerson graph 0 3 in 
+   export flowgraph "./resultEuroFord.dot" ) in
+();;
+
+(* Test for routage tables*)
+let () =
+  (let strgraph = from_routage_tables_file "graphs/routageTablesSimple.txt" in 
+
+    
+   export strgraph "./resultRoutage.dot" ) in
+();;
+
+(* Test for FordFulkerson with small routage Tables*)
+let () =
+  (let strgraph = from_routage_tables_file "graphs/routageTablesSimple.txt" in 
+
+   let graph =  gmap strgraph int_of_string in 
+   let flowgraph =  fordFurkerson graph 1 3 in 
+   export flowgraph "./resultFordRoutage.dot" ) in
+();;
+
+(* Test for FordFulkerson with medium routage Tables*)
+let () =
+  (let flowgraph = max_bandwith_routage "graphs/routageTablesMoyen.txt" 1 3 in
+   export flowgraph "./resultFordBigRoutage.dot" ) in
+();;
+
+(* Test for FordFulkerson with big routage Tables*)
+let () =
+  (let flowgraph = max_bandwith_routage "graphs/routageTablesGrand.txt" 1 3 in
+   export flowgraph "./resultFordBigRoutage.dot" ) in
+();;
 
 (* A transformer pour le faire marcher avec la new implémentation 
    (* Test pour FordFulkerson.find_path  sans boucle*)

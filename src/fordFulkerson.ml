@@ -48,23 +48,23 @@ let find_path graph src target =
 
 
 
-let flow_path arc_list =
+let flow_path path =
   let rec loop list min = 
     match list with
     | [] -> min
     | x::rest -> if (x.lbl < min) then (loop rest x.lbl) else (loop rest min)
   in
-  loop arc_list Int.max_int;;
+  loop path Int.max_int;;
 
 
-let update_graph graph arc_list flow_n =
-  let rec loop graph arc_list flow_n =
-    match arc_list with 
+let update_graph graph path flow_n =
+  let rec loop graph path flow_n =
+    match path with 
     | [] -> graph
     | x::rest -> (let graph_bis = add_arc graph x.src x.tgt (-flow_n) in 
                   loop (add_arc graph_bis x.tgt x.src flow_n) rest flow_n) 
   in
-  loop graph arc_list flow_n;;
+  loop graph path flow_n;;
 
 let create_flow_graph base_graph ford_graph =
   let graph_out = clone_nodes base_graph in
@@ -84,7 +84,7 @@ let create_flow_graph base_graph ford_graph =
               if x.lbl > arc_oppose.lbl then
                 new_arc graph {src =x.src;tgt=x.tgt; lbl= (string_of_int 0)^"/"^(string_of_int arc.lbl)}
               else
-                new_arc graph {src =x.src;tgt=x.tgt; lbl= (string_of_int (arc_oppose.lbl-x.lbl))^"/"^(string_of_int arc_oppose.lbl)}
+                new_arc graph {src =x.src;tgt=x.tgt; lbl= (string_of_int (arc_oppose.lbl-x.lbl))^"/"^(string_of_int arc.lbl)}
             )
           )    
       )

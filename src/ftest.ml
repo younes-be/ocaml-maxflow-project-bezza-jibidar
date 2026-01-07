@@ -124,52 +124,20 @@ let () =
 
    let graph =  gmap strgraph int_of_string in 
    let flowgraph =  fordFurkerson graph 1 3 in 
-   export flowgraph "./resultFordRoutage.dot" ) in
+   export flowgraph "./resultFordRoutage.dot" ;
+   Printf.printf ("Pour l'exemple avec la table de routage simple, le débit max entre la source et la destination est : %d \n%!") (max_flow flowgraph 3)) in
 ();;
 
 (* Test for FordFulkerson with medium routage Tables*)
 let () =
   (let flowgraph = max_bandwith_routage "graphs/routageTablesMoyen.txt" 1 3 in
-   export flowgraph "./resultFordBigRoutage.dot" ) in
-();;
+   export flowgraph "./resultFordBigRoutage.dot"   ;
+  Printf.printf ("Pour l'exemple avec la table de routage medium, le débit max entre la source et la destination est : %d \n%!") (max_flow flowgraph 3))
+  in ();;
 
 (* Test for FordFulkerson with big routage Tables*)
 let () =
   (let flowgraph = max_bandwith_routage "graphs/routageTablesGrand.txt" 1 3 in
-   export flowgraph "./resultFordBigRoutage.dot" ) in
+   export flowgraph "./resultFordBigRoutage.dot" ;
+   Printf.printf ("Pour l'exemple avec la grande table de routage , le débit max entre la source et la destination est : %d \n%!") (max_flow flowgraph 3)) in
 ();;
-
-(* A transformer pour le faire marcher avec la new implémentation 
-   (* Test pour FordFulkerson.find_path  sans boucle*)
-   let () =
-
-   let graph = from_file "graphs/graph1.txt"
-   in
-   (* s'assurer qu'il y a un arc 1 -> 2 *)
-   let path = find_path graph 0 5 in
-
-
-   (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
-   let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
-   let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
-   Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)
-
-
-
-   (* Test pour FordFulkerson.find_path  avec boucle*)
-   let () =
-
-   let graphinit = from_file "graphs/graph1.txt"
-   in
-
-   (*rajouter une boucle avec une arête entre 5 et 2 *)
-   let graph_boucle = add_arc (gmap graphinit int_of_string) 5 2 67 in
-   (* s'assurer qu'il y a un arc 1 -> 2 *)
-   let path = find_path (gmap graph_boucle string_of_int) 0 5 in
-
-   (* Afficher le résultat : la liste des arcs (src->tgt:lbl) *)
-   let string_of_arc a = Printf.sprintf "%d->%d:%s" a.src a.tgt a.lbl in
-   let path_str = String.concat " -> " (List.map string_of_arc (List .rev path)) in
-   Printf.printf "find_path  : %s\n%!" (if path = [] then "(aucun chemin)" else path_str)
-
-*)

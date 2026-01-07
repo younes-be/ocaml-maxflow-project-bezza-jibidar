@@ -77,9 +77,7 @@ let create_flow_graph base_graph ford_graph =
             (*Si on trouve un arc , c'est que on a sûrement mis du flot sur cette arc  *)
             (*On check le flot sur x, si on a x.lbl > arc.lbl , c'est sûrement que dans le graphe de base , il existe un arc dans les 2 sens*)
             (*et que x n'est pas vraiment mis à contribution*)
-            (* if (x.lbl > arc.lbl) then (new_arc graph {src =arc.src;tgt =arc.tgt;lbl= "0/"^(string_of_int arc.lbl)}) 
-            else (new_arc graph {src =arc.src;tgt=arc.tgt; lbl= (string_of_int x.lbl)^"/"^(string_of_int arc.lbl)}) *)
-
+            
             match find_arc base_graph arc.tgt arc.src with
             |None -> new_arc graph {src=arc.src;tgt= arc.tgt;lbl= (string_of_int x.lbl)^"/"^(string_of_int arc.lbl)} 
             | Some arc_oppose ->(

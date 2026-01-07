@@ -16,6 +16,10 @@ let add_arc g id1 id2 n =
   |None -> new_arc g {src = id1 ; tgt = (id2) ; lbl = (n) }
   |Some arc -> new_arc g {src = id1 ; tgt = id2 ; lbl = (arc.lbl+n)} ;;
 
+let extract s = Scanf.sscanf s "%d/%d" (fun x _ -> x);;
+;; 
 
-
+let max_flow g id = 
+  e_fold g (  fun sum arc -> match arc.tgt with 
+  |x -> if x=id then (sum+(extract arc.lbl)) else sum ) 0 ;;
 
